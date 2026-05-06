@@ -12,7 +12,7 @@ class Schedule:
     def print_header(self):
         print(f"{'Subject':<6} {'Catalog':<7} {'Section':<8} {'Component':<10} "
               f"{'Session':<8} {'Units':<5} {'TotEnrl':<8} {'CapEnrl':<8} Instructor")
-        print("-" * 90)
+        print("#" * 90)
 
     def print(self):
         self.print_header()
