@@ -1,0 +1,144 @@
+# 1. ScheduleItem Class (dataclass)**
+
+Class ScheduleItem:
+- Fields:
+  - subject (string)
+  - catalog (string)
+  - section (string)
+  - component (string)
+  - session (string)
+  - units (int)
+  - tot_enrl (int)
+  - cap_enrl (int)
+  - instructor (string)
+
+Method get_key():
+- return subject + "_" + catalog + "_" + section
+
+Method print():
+- print subject, catalog, section, component, session, units, tot_enrl, cap_enrl, instructor in formatted columns
+
+---
+
+## **2. Schedule Class**
+
+Class Schedule:
+- dictionary schedule_dict  (key → ScheduleItem)
+
+Method add_entry(item):
+- key = item.get_key()
+- schedule_dict[key] = item
+
+Method print_header():
+- print column titles in aligned format
+
+Method print():
+- call print_header()
+- for each item in schedule_dict values:
+  - call item.print()
+
+Method find_by_subject(subject):
+- return list of items where item.subject == subject
+
+Method find_by_subject_catalog(subject, catalog):
+- return list of items where item.subject == subject AND item.catalog == catalog
+
+Method find_by_instructor_last_name(last_name):
+- return list of items where last_name is in item.instructor
+
+---
+
+## **3. Loading Data from CSV**
+
+Function load_csv(filename):
+
+1. open file using encoding "utf-8-sig"
+2. create csv.DictReader to read rows
+3. for each row in reader:
+   - extract required fields:
+     - subject = row["Subject"]
+     - catalog = row["Catalog"]
+     - section = row["Section"]
+     - component = row["Component"]
+     - session = row["Session"]
+     - units = int(row["Units"])
+     - tot_enrl = int(row["TotEnrl"])
+     - cap_enrl = int(row["CapEnrl"])
+     - instructor = row["Instructor"]
+   - create ScheduleItem with these fields
+   - add item to Schedule using add_entry()
+
+4. return Schedule object
+
+# 4. Menu System (main.py)**
+
+main():
+
+1. load schedule = load_csv("courses.csv")
+
+2. loop forever:
+   - print menu:
+     - 1: Display full schedule
+     - 2: Search by subject
+     - 3: Search by subject + catalog
+     - 4: Search by instructor last name
+     - 5: Quit
+
+   - get user choice
+
+   - if choice == 1:
+       - schedule.print()
+
+   - if choice == 2:
+       - ask for subject
+       - results = schedule.find_by_subject(subject)
+       - print_header()
+       - print each result
+
+   - if choice == 3:
+       - ask for subject
+       - ask for catalog
+       - results = schedule.find_by_subject_catalog(subject, catalog)
+       - print_header()
+       - print each result
+
+   - if choice == 4:
+       - ask for instructor last name
+       - results = schedule.find_by_instructor_last_name(last_name)
+       - print_header()
+       - print each result
+
+   - if choice == 5:
+       - break loop
+
+3. end program
+
+# 5. Dictionary Key Structure**
+
+Key format:
+```
+Subject_Catalog_Section
+```
+
+Example:
+```
+BIO_141_D01
+```
+
+Used as:
+- dictionary key for fast lookup
+- ensures uniqueness
+- demonstrates hash table usage
+
+
+########## Key Attributes########
+
+- Loads all course data into a dictionary  
+- Uses dataclass objects to store each row  
+- Supports searching by:
+  - subject
+  - subject + catalog
+  - instructor last name  
+- Prints formatted schedule reports  
+- Provides a menu-driven interface  
+- Does NOT modify the CSV file  
